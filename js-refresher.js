@@ -68,3 +68,15 @@ const studentsWithAverages = students.map((student) => ({
 studentsWithAverages.forEach((student) => {
     console.log(`${student.name}: ${student.average.toFixed(2)}`);
 });
+
+// Task 9 - Object Spread
+
+const emir = students.find((student) => student.name === "Emir");
+
+const updatedEmir = {
+    ...emir,
+    year: 3,
+};
+
+console.log(`Original: ${emir.name} is in year ${emir.year}`);
+console.log(`Updated: ${updatedEmir.name} is in year ${updatedEmir.year}`);
