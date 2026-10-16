@@ -88,3 +88,25 @@ students.forEach((student) => {
 
     console.log(`${student.name}: ${github}`);
 });
+
+// Task 11 - Async/Await and Fetch API
+
+const loadUser = async (id) => {
+    try {
+        const response = await fetch(
+            `https://jsonplaceholder.typicode.com/users/${id}`
+        );
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch user");
+        }
+
+        const user = await response.json();
+
+        console.log(`User ${id}: ${user.name}`);
+    } catch (error) {
+        console.log(`Could not load user ${id}`);
+    }
+};
+
+loadUser(1);
