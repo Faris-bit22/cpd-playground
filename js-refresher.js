@@ -80,3 +80,11 @@ const updatedEmir = {
 
 console.log(`Original: ${emir.name} is in year ${emir.year}`);
 console.log(`Updated: ${updatedEmir.name} is in year ${updatedEmir.year}`);
+
+// Task 10 - Optional Chaining and Nullish Coalescing
+
+students.forEach((student) => {
+    const github = student.contact?.github ?? "no GitHub";
+
+    console.log(`${student.name}: ${github}`);
+});
