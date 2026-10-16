@@ -36,3 +36,8 @@ const greet = (name, year) => {
 students.forEach(({ name, year }) => {
     console.log(greet(name, year));
 });
+// Task 6 - Array.map()
+
+const studentNames = students.map((student) => student.name);
+
+console.log("Student names:", studentNames);
