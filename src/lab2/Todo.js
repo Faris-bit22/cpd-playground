@@ -1,6 +1,10 @@
 import { useState } from 'react';
-import { Pressable, Text, TextInput, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { styles } from './styles';
+
+import AddTodo from './AddTodo';
+import FilterBar from './FilterBar';
+import TodoItem from './TodoItem';
 
 export default function Todo() {
     const [todos, setTodos] = useState([
@@ -8,15 +12,10 @@ export default function Todo() {
         { id: '2', title: 'Finish Lab 2', done: false },
     ]);
 
-    const [text, setText] = useState('');
-
-    // Task 7 - Trenutno odabrani filter
     const [filter, setFilter] = useState('all');
 
-    // Task 6 - Broj nezavrsenih zadataka
     const remaining = todos.filter(todo => !todo.done).length;
 
-    // Task 7 - Filtriranje zadataka
     const visibleTodos = todos.filter(todo => {
         if (filter === 'active') {
             return !todo.done;
@@ -29,13 +28,7 @@ export default function Todo() {
         return true;
     });
 
-    function addTodo() {
-        const title = text.trim();
-
-        if (title === '') {
-            return;
-        }
-
+    function addTodo(title) {
         const newTodo = {
             id: Date.now().toString(),
             title: title,
@@ -43,7 +36,6 @@ export default function Todo() {
         };
 
         setTodos(previous => [...previous, newTodo]);
-        setText('');
     }
 
     function removeTodo(id) {
@@ -70,77 +62,23 @@ export default function Todo() {
                 {remaining} left
             </Text>
 
-            <TextInput
-                style={styles.input}
-                placeholder="New task"
-                value={text}
-                onChangeText={setText}
+            <AddTodo onAdd={addTodo} />
+
+            <FilterBar
+                filter={filter}
+                onChange={setFilter}
             />
 
-            <Pressable style={styles.button} onPress={addTodo}>
-                <Text style={styles.buttonText}>Add</Text>
-            </Pressable>
-
-            {/* Task 7 - Filter dugmad */}
-            <View style={styles.row}>
-                {['all', 'active', 'done'].map(item => (
-                    <Pressable
-                        key={item}
-                        onPress={() => setFilter(item)}
-                        style={[
-                            styles.button,
-                            {
-                                backgroundColor:
-                                    filter === item ? '#003A6D' : '#9AA6B5',
-                                flex: 1,
-                            },
-                        ]}
-                    >
-                        <Text style={styles.buttonText}>
-                            {item === 'all'
-                                ? 'All'
-                                : item === 'active'
-                                    ? 'Active'
-                                    : 'Done'}
-                        </Text>
-                    </Pressable>
-                ))}
-            </View>
-
-            {/* Lista zadataka */}
             {todos.length === 0 ? (
                 <Text style={styles.muted}>No tasks yet</Text>
             ) : (
                 visibleTodos.map(todo => (
-                    <View key={todo.id} style={styles.card}>
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <Pressable
-                                onPress={() => toggleTodo(todo.id)}
-                                style={{ flex: 1 }}
-                            >
-                                <Text
-                                    style={{
-                                        textDecorationLine: todo.done
-                                            ? 'line-through'
-                                            : 'none',
-                                        color: todo.done ? '#777777' : '#000000',
-                                    }}
-                                >
-                                    {todo.title}
-                                </Text>
-                            </Pressable>
-
-                            <Pressable onPress={() => removeTodo(todo.id)}>
-                                <Text style={{ color: 'red' }}>Delete</Text>
-                            </Pressable>
-                        </View>
-                    </View>
+                    <TodoItem
+                        key={todo.id}
+                        todo={todo}
+                        onToggle={toggleTodo}
+                        onRemove={removeTodo}
+                    />
                 ))
             )}
         </View>
