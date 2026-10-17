@@ -10,6 +10,9 @@ export default function Todo() {
 
     const [text, setText] = useState('');
 
+    // Broj nezavrsenih zadataka
+    const remaining = todos.filter(todo => !todo.done).length;
+
     function addTodo() {
         const title = text.trim();
 
@@ -33,12 +36,23 @@ export default function Todo() {
         );
     }
 
+    // Task 6 - Oznacavanje zavrsenih zadataka
+    function toggleTodo(id) {
+        setTodos(previous =>
+            previous.map(todo =>
+                todo.id === id
+                    ? { ...todo, done: !todo.done }
+                    : todo
+            )
+        );
+    }
+
     return (
         <View style={styles.screen}>
             <Text style={styles.title}>My To-Do List</Text>
 
             <Text style={styles.muted}>
-                {todos.length} tasks
+                {remaining} left
             </Text>
 
             <TextInput
@@ -64,9 +78,21 @@ export default function Todo() {
                                 alignItems: 'center',
                             }}
                         >
-                            <Text style={{ flex: 1 }}>
-                                {todo.title}
-                            </Text>
+                            <Pressable
+                                onPress={() => toggleTodo(todo.id)}
+                                style={{ flex: 1 }}
+                            >
+                                <Text
+                                    style={{
+                                        textDecorationLine: todo.done
+                                            ? 'line-through'
+                                            : 'none',
+                                        color: todo.done ? '#777777' : '#000000',
+                                    }}
+                                >
+                                    {todo.title}
+                                </Text>
+                            </Pressable>
 
                             <Pressable onPress={() => removeTodo(todo.id)}>
                                 <Text style={{ color: 'red' }}>Delete</Text>
