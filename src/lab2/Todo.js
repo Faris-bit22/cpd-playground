@@ -10,8 +10,24 @@ export default function Todo() {
 
     const [text, setText] = useState('');
 
-    // Broj nezavrsenih zadataka
+    // Task 7 - Trenutno odabrani filter
+    const [filter, setFilter] = useState('all');
+
+    // Task 6 - Broj nezavrsenih zadataka
     const remaining = todos.filter(todo => !todo.done).length;
+
+    // Task 7 - Filtriranje zadataka
+    const visibleTodos = todos.filter(todo => {
+        if (filter === 'active') {
+            return !todo.done;
+        }
+
+        if (filter === 'done') {
+            return todo.done;
+        }
+
+        return true;
+    });
 
     function addTodo() {
         const title = text.trim();
@@ -36,7 +52,6 @@ export default function Todo() {
         );
     }
 
-    // Task 6 - Oznacavanje zavrsenih zadataka
     function toggleTodo(id) {
         setTodos(previous =>
             previous.map(todo =>
@@ -66,10 +81,37 @@ export default function Todo() {
                 <Text style={styles.buttonText}>Add</Text>
             </Pressable>
 
+            {/* Task 7 - Filter dugmad */}
+            <View style={styles.row}>
+                {['all', 'active', 'done'].map(item => (
+                    <Pressable
+                        key={item}
+                        onPress={() => setFilter(item)}
+                        style={[
+                            styles.button,
+                            {
+                                backgroundColor:
+                                    filter === item ? '#003A6D' : '#9AA6B5',
+                                flex: 1,
+                            },
+                        ]}
+                    >
+                        <Text style={styles.buttonText}>
+                            {item === 'all'
+                                ? 'All'
+                                : item === 'active'
+                                    ? 'Active'
+                                    : 'Done'}
+                        </Text>
+                    </Pressable>
+                ))}
+            </View>
+
+            {/* Lista zadataka */}
             {todos.length === 0 ? (
                 <Text style={styles.muted}>No tasks yet</Text>
             ) : (
-                todos.map(todo => (
+                visibleTodos.map(todo => (
                     <View key={todo.id} style={styles.card}>
                         <View
                             style={{
