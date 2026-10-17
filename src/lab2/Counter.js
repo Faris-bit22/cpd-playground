@@ -4,11 +4,13 @@ import { styles } from './styles';
 
 export default function Counter() {
     const [count, setCount] = useState(0);
+    const [liked, setLiked] = useState(false);
 
     return (
         <View style={styles.screen}>
             <Text style={styles.title}>Count: {count}</Text>
 
+            {/* Dugmad za brojac */}
             <View style={styles.row}>
                 <Pressable
                     disabled={count === 0}
@@ -35,6 +37,23 @@ export default function Counter() {
                     <Text style={styles.buttonText}>Reset</Text>
                 </Pressable>
             </View>
+
+            {/* OVDJE DODAJEMO LIKE DUGME */}
+            <Pressable
+                onPress={() => setLiked(previous => !previous)}
+                style={[
+                    styles.button,
+                    {
+                        backgroundColor: liked ? '#2E7D32' : '#003A6D',
+                        alignSelf: 'flex-start',
+                    },
+                ]}
+            >
+                <Text style={styles.buttonText}>
+                    {liked ? 'Liked (13)' : 'Like (12)'}
+                </Text>
+            </Pressable>
+
         </View>
     );
 }
